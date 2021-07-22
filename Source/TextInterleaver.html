@@ -1,0 +1,106 @@
+<html>
+
+<body>
+
+	<div id="divUi">
+	
+		<h3>Text Interleaver</h3>
+		<p>Enter multiple passages of text separated with the specified delimiter, then click the button to interleave the lines.</p>
+
+		<label>Passage Delimiter:</label>
+		<input id="inputPassageDelimiter" value="<PassageBreak />"></input>
+		<br />
+
+		<label>Text Passages to Interleave:</label>
+		<button onclick="buttonClear_Clicked();">Clear</button>
+		<br />
+		<textarea id="textareaTextToInterleave" cols="80" rows="16">
+This is a passage of text in English.
+It has been translated into Pig Latin below.
+
+The original and the translation will be interleaved.
+This is intended to assist with translating works.
+
+&lt;PassageBreak /&gt;
+Isthay isway away assagepay ofway extway inway Englishway.
+Itway ashay eenbay anslatedtray intoway Igpay Atinlay elowbay.
+
+Ethay originalway andway ethay anslationtray illway ebay interleavedway.
+Isthay isway intendedway ootay assistway ithway anslatingtray orksway.
+
+		</textarea>
+		<br />
+
+		<button onclick="buttonInterleave_Clicked();">Interleave</button>
+		<br />
+
+		<label>Text Interleaved:</label><br />
+		<textarea id="textareaTextInterleaved" cols="80" rows="16"></textarea>
+
+	</div>
+
+<script type="text/javascript">
+
+// UI event handlers.
+
+function buttonClear_Clicked()
+{
+	var d = document;
+
+	var textareaTextToInterleave =
+		d.getElementById("textareaTextToInterleave");
+	var textToInterleave = textareaTextToInterleave.value;
+	textareaTextToInterleave.value = "";
+
+	var textareaTextInterleaved =
+		d.getElementById("textareaTextInterleaved");
+	textareaTextInterleaved.value = "";
+}
+
+function buttonInterleave_Clicked()
+{
+	var d = document;
+
+	var inputPassageDelimiter =
+		d.getElementById("inputPassageDelimiter");
+	var passageDelimiter = inputPassageDelimiter.value;
+
+	var textareaTextToInterleave =
+		d.getElementById("textareaTextToInterleave");
+	var textToInterleave = textareaTextToInterleave.value;
+
+	var newline = "\n";
+	var passagesToInterleave = textToInterleave.split
+	(
+		passageDelimiter + newline
+	);
+	var passagesAsLineArrays = passagesToInterleave.map(x => x.split(newline));
+	var passageFirstAsLines = passagesAsLineArrays[0];
+
+	var textInterleavedSoFar = "";
+	for (var i = 0; i < passageFirstAsLines.length; i++)
+	{
+		var lineGroupingInterleavedSoFar = "";
+
+		for (var p = 0; p < passagesAsLineArrays.length; p++)
+		{
+			var passageAsLines = passagesAsLineArrays[p];
+			var lineFromPassage = passageAsLines[i];
+			lineGroupingInterleavedSoFar += lineFromPassage + newline;
+		}
+
+		lineGroupingInterleavedSoFar += newline;
+
+		textInterleavedSoFar += lineGroupingInterleavedSoFar;
+	}
+
+	var textareaTextInterleaved =
+		d.getElementById("textareaTextInterleaved");
+	textareaTextInterleaved.value = textInterleavedSoFar;
+}
+
+</script>
+
+</body>
+
+</html>
