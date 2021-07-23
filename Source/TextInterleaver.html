@@ -28,10 +28,13 @@ Itway ashay eenbay anslatedtray intoway Igpay Atinlay elowbay.
 Ethay originalway andway ethay anslationtray illway ebay interleavedway.
 Isthay isway intendedway ootay assistway ithway anslatingtray orksway.
 
-		</textarea>
+</textarea>
 		<br />
 
 		<button onclick="buttonInterleave_Clicked();">Interleave</button>
+		<button onclick="buttonDeinterleave_Clicked();">Deinterleave into:</button>
+		<input id="inputPassageCount" type="number" value="2"></input>
+
 		<br />
 
 		<label>Text Interleaved:</label><br />
@@ -57,24 +60,74 @@ function buttonClear_Clicked()
 	textareaTextInterleaved.value = "";
 }
 
+function buttonDeinterleave_Clicked()
+{
+	var d = document;
+
+	var inputPassageCount =
+		d.getElementById("inputPassageCount");
+	var passageCountAsString = inputPassageCount.value;
+	var passageCount = parseInt(passageCountAsString);
+
+	var textareaTextInterleaved =
+		d.getElementById("textareaTextInterleaved");
+	var textInterleaved = textareaTextInterleaved.value;
+
+	var newline = "\n";
+	var textInterleavedAsLines = textInterleaved.split(newline);
+
+	var passagesDeinterleavedSoFar = [];
+	for (var p = 0; p < passageCount; p++)
+	{
+		passagesDeinterleavedSoFar.push("");
+	}
+
+	for (var i = 0; i < textInterleavedAsLines.length; i += passageCount + 1)
+	{
+		for (var p = 0; p < passageCount; p++)
+		{
+			var passageSoFar = passagesDeinterleavedSoFar[p];
+			var lineIndex = i + p;
+			if (lineIndex < textInterleavedAsLines.length)
+			{
+				var lineFromPassage = textInterleavedAsLines[lineIndex];
+				passageSoFar += lineFromPassage + newline;
+				passagesDeinterleavedSoFar[p] = passageSoFar;
+			}
+		}
+	}
+
+	var inputPassageDelimiter =
+		d.getElementById("inputPassageDelimiter");
+	var passageDelimiter = inputPassageDelimiter.value + newline;
+
+	var textDeinterleaved =
+		passagesDeinterleavedSoFar.join(passageDelimiter);
+
+	var textareaTextToInterleave =
+		d.getElementById("textareaTextToInterleave");
+	textareaTextToInterleave.value = textDeinterleaved;
+
+}
+
 function buttonInterleave_Clicked()
 {
 	var d = document;
 
 	var inputPassageDelimiter =
 		d.getElementById("inputPassageDelimiter");
-	var passageDelimiter = inputPassageDelimiter.value;
+	var newline = "\n";
+	var passageDelimiter =
+		newline + inputPassageDelimiter.value + newline;
 
 	var textareaTextToInterleave =
 		d.getElementById("textareaTextToInterleave");
 	var textToInterleave = textareaTextToInterleave.value;
 
-	var newline = "\n";
-	var passagesToInterleave = textToInterleave.split
-	(
-		passageDelimiter + newline
-	);
-	var passagesAsLineArrays = passagesToInterleave.map(x => x.split(newline));
+	var passagesToInterleave =
+		textToInterleave.split(passageDelimiter);
+	var passagesAsLineArrays =
+		passagesToInterleave.map(x => x.split(newline));
 	var passageFirstAsLines = passagesAsLineArrays[0];
 
 	var textInterleavedSoFar = "";
